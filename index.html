@@ -57,62 +57,103 @@
     </div>
 
     <script>
-        // Objeto para almacenar los emparejamientos. La clave es el usuario y el valor es un array de sus parejas.
+        // Objeto para almacenar los emparejamientos
         const pairings = {};
 
-        // Raw data extraída del PDF
+        // Lista ya normalizada (todos minúsculas, sin tildes ni caracteres inválidos)
         const rawData = [
-            "Bianca-biiaancaa.c con Pilar-pilar_gil_", "Carles-carlesmmv con Santiago-iamsantiberna",
-            "María-bel03_rl con Andrea-andreaadima", "Laura-lauuraa.bm con CARMEN-carmeencanoo_",
-            "Ariadna-a.r.a02 con Patricia-patriiserrano_", "Yaiza-yaizi_s_07 con Gemma-gemma.borrass",
-            "David-_.dnbm._9801 con Ro-ro_lopcod", "Yasmine-_yay0u_ con Otman-the_real_otman1",
-            "Dhirar-dhirardo con Salma-_salma_214", "Fran-queesada_ con Clara-claararius_",
-            "Youssra-_.you_._ssi._ con Javier Ferrer-javier_ferrer5", "Lina-luchajoverpb con Javi-_javiipeerez_",
-            "Irene-dakkenki_uchiha con Cristian-cristiandragomir.", "Gemma-gemma.va con Daniel-daniiiel_005",
-            "Hector Guerrero Fores-hectorguerrero._ con Patricia-patri_1507_", "Karina-kariinaa. 12 con Hugo-hug0_sen",
-            "Nabil-elnaabiiil con Hiba-hiba.sdk_", "Pavel-chotkiy04_ con Carla-carlaasteff",
-            "Hugo-el.hugonote con Elisa-eelidelarubia", "Imane-iimanch._ con Ashraf-Ashraf.sl_",
-            "Esther-istharaix con Vanessa-vanessatiba_", "Kevin-kev_23_pto con Mario-mariopallares_",
-            "Irene-Kiena_x con Vanessa-vanessatiba_", "Unai-unai.la.coca con Kevin-kev_23_pto",
-            "Aitor-_aitor.j con Sandra-_saandra_99", "Daniel-Danieelgb01 con Daniela Lucas García-danielaluucas",
-            "Jorge-joorgedelaflor_ con Jade-joderjade", "Marko Díaz-marko_diiaz con Carla-carlapetit",
-            "Yerai Teixeira-yerai312 con Natalia Pascual-nata.pascual", "Isabel-isabelginer_ con Daniel-indeal03",
-            "Inés-ines.duvaaal con Jacobo-Jacobodm_", "Samuel-samuelsoriia con Ines-ines.duvaaal",
-            "Chema-jmdoblas_ con Kenza-kenzaditom", "Alberto-albertomascarell_ con Nuria-_nuriiaa.21",
-            "Younes-Younesagoujil_ con Salma-_salma_214", "Candela-Candelamateuu con Carlos-cbioque_15",
-            "nuria-nuriviciano con pablo-Ppf0902", "Denisa-denisatiba_ con Diego Marzá-diegomarzaa",
-            "Edilson-edi.arango7 con Raquel-raquelgavrila_", "paula-paaaula_20 con sergio-sergiofernaddezz",
-            "David-davidfustertv_ con Bianca-biiaancaa.c", "Jaime-dm_jaime456 con María-Bel03_rl",
-            "Iván-ivan_c_4_ con Andrea-andreaadima", "Jesús-jesus_marza con Natalia Pascual-nata.pascual",
-            "Joan-joanpl_con Raquel-raquelgavrila_", "Alejandro-Alexfa98 con Isabel-isabelginer_",
-            "Monfis-adrimonfis._ con paula-paaaula_20", "Alberto-Alberto_hm21 con nuria-nuriviciano",
-            "victor-victoor.bs10 con Ariadna-a.r.a02", "Nicolás-Nicolás.boronat con kariinaa-kariinaa. 12",
-            "Adrian-adrianqc_11 con Laura-lauravf_04", "Alex-Ale ex con Nuria-_nuriiaa.21",
-            "Fernando-Fernandoo.peerez con laura-lauuraa.bm", "claudio-claudioiborra_ con yassmine-_yay0u_",
-            "Alex-alexb._085 con Raquel-raquelgavrila_", "Angel-Angel15_21 con Sandra-_saandra_99",
-            "Angelo Gabriel Lunca-angelo_lunca con laura-lauuraa.bm", "vicente-vicenteperis_ con _you_._ssi._",
-            "Antonio Giménez Ilarri-antoniogimeenez con Hiba-hiba.sdk_", "Ariel-arielpereira con Candela-Candelamateuu",
-            "Ayman-Ayman20040 con Pilar-pilar_gil", "quique-quique.sm con Patricia-patriiserrano_",
-            "marc- marc_b.h._ con andrea-andreaadima", "bruno-brunomarttii con maria-Bel03_rl",
-            "Daniel-Dani_ccss con CARMEN-carmeencanoo_", "nicolas-nicolaspiter0 con gemma-gemma.borrass",
-            "diego-Garcia00dieguito con irene-dakkenki_uchiha", "jorge-jorgeandresmd_ con elisa-eelidelarubia",
-            "carlos Gemelo1386 con carla-carlapetit", "mario-marioserrulla con ro-@ro_lopcod",
-            "santiago-santiedooo con Yaizi-Yaizi_s_07", "Dani-dani_ps15 con Yaizi-Yaizi_s_07",
-            "Jose-ppd5 con salma-_salma_214", "Juan-Juan_est2210 con Laura-lauravf_04",
-            "José Manuel-josemagll con Ariadna-a.r.a02", "Mario-mariete181 con Karina-kariinaa.12",
-            "jose-josemariamca8 con salma-_salma_214", "jose-josfenfau97 con Karina-kariinaa. 12",
-            "Pablo-pablito.celestial_01 con Youssra_you_._ssi._", "Pedro-pedrocarbonell_ con Chema-jmdoblas",
-            "Pablo-pablo.peris con Denisa-denisatiba", "Paco-Paco.tr con Bianca-biiaancaa.c",
-            "Pau-Parapapau.vi con Pilar-pilar_gil"
+            "bianca-biiaancaa.c con pilar-pilar_gil_",
+            "carles-carlesmmv con santiago-iamsantiberna",
+            "maria-bel03_rl con andrea-andreaadima",
+            "laura-lauuraa.bm con carmen-carmeencanoo_",
+            "ariadna-a.r.a02 con patricia-patriiserrano_",
+            "yaiza-yaizi_s_07 con gemma-gemma.borrass",
+            "david-_.dnbm._9801 con ro-ro_lopcod",
+            "yasmine-_yay0u_ con otman-the_real_otman1",
+            "dhirar-dhirardo con salma-_salma_214",
+            "fran-queesada_ con clara-claararius_",
+            "youssra-_.you_._ssi._ con javierferrer-javier_ferrer5",
+            "lina-luchajoverpb con javi-_javiipeerez_",
+            "irene-dakkenki_uchiha con cristian-cristiandragomir.",
+            "gemma-gemma.va con daniel-daniiiel_005",
+            "hectorguerrerofores-hectorguerrero._ con patricia-patri_1507_",
+            "karina-kariinaa.12 con hugo-hug0_sen",
+            "nabil-elnaabiiil con hiba-hiba.sdk_",
+            "pavel-chotkiy04_ con carla-carlaasteff",
+            "hugo-el.hugonote con elisa-eelidelarubia",
+            "imane-iimanch._ con ashraf-ashraf.sl_",
+            "esther-istharaix con vanessa-vanessatiba_",
+            "kevin-kev_23_pto con mario-mariopallares_",
+            "irene-kiena_x con vanessa-vanessatiba_",
+            "unai-unai.la.coca con kevin-kev_23_pto",
+            "aitor-_aitor.j con sandra-_saandra_99",
+            "daniel-danieelgb01 con danielalucasgarcia-danielaluucas",
+            "jorge-joorgedelaflor_ con jade-joderjade",
+            "marko-marko_diiaz con carla-carlapetit",
+            "yerai-yerai312 con nataliapascual-nata.pascual",
+            "isabel-isabelginer_ con daniel-indeal03",
+            "ines-ines.duvaaal con jacobo-jacobodm_",
+            "samuel-samuelsoriia con ines-ines.duvaaal",
+            "chema-jmdoblas_ con kenza-kenzaditom",
+            "alberto-albertomascarell_ con nuria-_nuriiaa.21",
+            "younes-younesagoujil_ con salma-_salma_214",
+            "candela-candelamateuu con carlos-cbioque_15",
+            "nuria-nuriviciano con pablo-ppf0902",
+            "denisa-denisatiba_ con diego-diegomarzaa",
+            "edilson-edi.arango7 con raquel-raquelgavrila_",
+            "paula-paaaula_20 con sergio-sergiofernaddezz",
+            "david-davidfustertv_ con bianca-biiaancaa.c",
+            "jaime-dm_jaime456 con maria-bel03_rl",
+            "ivan-ivan_c_4_ con andrea-andreaadima",
+            "jesus-jesus_marza con nataliapascual-nata.pascual",
+            "joan-joanpl con raquel-raquelgavrila_",
+            "alejandro-alexfa98 con isabel-isabelginer_",
+            "monfis-adrimonfis._ con paula-paaaula_20",
+            "alberto-alberto_hm21 con nuria-nuriviciano",
+            "victor-victoor.bs10 con ariadna-a.r.a02",
+            "nicolas-nicolas.boronat con karina-kariinaa.12",
+            "adrian-adrianqc_11 con laura-lauravf_04",
+            "alex-alex con nuria-_nuriiaa.21",
+            "fernando-fernandoo.peerez con laura-lauuraa.bm",
+            "claudio-claudioiborra_ con yasmine-_yay0u_",
+            "alex-alexb._085 con raquel-raquelgavrila_",
+            "angel-angel15_21 con sandra-_saandra_99",
+            "angelo-angelo_lunca con laura-lauuraa.bm",
+            "vicente-vicenteperis con youssra-_.you_._ssi._",
+            "antonioantoniogimeenez-antoniogimeenez con hiba-hiba.sdk_",
+            "ariel-arielpereira con candela-candelamateuu",
+            "ayman-ayman20040 con pilar-pilar_gil",
+            "quique-quique.sm con patricia-patriiserrano_",
+            "marc-marc_b.h._ con andrea-andreaadima",
+            "bruno-brunomarttii con maria-bel03_rl",
+            "daniel-dani_ccss con carmen-carmeencanoo_",
+            "nicolas-nicolaspiter0 con gemma-gemma.borrass",
+            "diego-garcia00dieguito con irene-dakkenki_uchiha",
+            "jorge-jorgeandresmd_ con elisa-eelidelarubia",
+            "carlos-carlosgemelo1386 con carla-carlapetit",
+            "mario-marioserrulla con ro-ro_lopcod",
+            "santiago-santiedooo con yaiza-yaizi_s_07",
+            "dani-dani_ps15 con yaiza-yaizi_s_07",
+            "jose-ppd5 con salma-_salma_214",
+            "juan-juan_est2210 con laura-lauravf_04",
+            "josemanuel-josemagll con ariadna-a.r.a02",
+            "mario-mariete181 con karina-kariinaa.12",
+            "jose-josemariamca8 con salma-_salma_214",
+            "jose-josfenfau97 con karina-kariinaa.12",
+            "pablo-pablito.celestial_01 con youssra-_.you_._ssi._",
+            "pedro-pedrocarbonell_ con chema-jmdoblas_",
+            "pablo-pablo.peris con denisa-denisatiba_",
+            "paco-paco.tr con bianca-biiaancaa.c",
+            "pau-parapapau.vi con pilar-pilar_gil"
         ];
 
-        // Función para procesar los datos y construir el objeto de emparejamientos
+        // Construir el objeto de emparejamientos
         function processData() {
             rawData.forEach(line => {
-                const parts = line.split(/ con | conn |_con_/i);
+                const parts = line.split(/ con /i);
                 if (parts.length === 2) {
-                    const user1 = parts[0].split('-').pop().trim().toLowerCase().replace('@','');
-                    const user2 = parts[1].split('-').pop().trim().toLowerCase().replace('@','');
+                    const user1 = parts[0].split('-').pop().trim();
+                    const user2 = parts[1].split('-').pop().trim();
 
                     if (user1 && user2) {
                         if (!pairings[user1]) pairings[user1] = [];
@@ -125,7 +166,7 @@
             });
         }
 
-        // Función para buscar y mostrar los resultados
+        // Buscar y mostrar resultados
         function searchPairing() {
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase().replace('@','');
             const resultsDiv = document.getElementById('results');
@@ -149,15 +190,20 @@
             }
         }
 
-        // Permitir buscar pulsando la tecla Enter
+        // Permitir buscar con Enter
         document.getElementById('searchInput').addEventListener('keyup', function(event) {
             if (event.key === 'Enter') {
                 searchPairing();
             }
         });
 
-        // Procesar los datos cuando la página se carga
+        // Procesar datos al cargar
         processData();
+    </script>
+
+</body>
+</html>
+
     </script>
 
 </body>
